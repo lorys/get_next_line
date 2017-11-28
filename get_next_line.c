@@ -29,11 +29,27 @@ int		get_next_line(const int fd, char **line)
 	char		line_read[BUFF_SIZE + 1];
 	static char *buff;
 	char		*tmp;
+	char		*tmp_buff;
 
+	printf("fuck\n");
 	if (buff != NULL)
 	{
-		*line = ft_strnew(ft_strlen(buff));
-		*line = ft_strsub(buff, 1, ft_strlen(buff) - 1);
+		if (find_break(buff) > -1)
+		{
+			*line = ft_strnew((size_t)find_break(buff));
+			*line = ft_strsub(buff, 0, (size_t)find_break(buff) - 1);
+			ft_strncpy(*line, buff, (find_break(buff) - 1));
+			tmp_buff = ft_strsub(*line, (find_break(buff) + 1), \
+				(ft_strlen(buff) - find_break(buff)));
+			free(buff);
+			buff = ft_strnew(ft_strlen(tmp_buff));
+			ft_strcpy(buff, tmp_buff);
+			free(tmp_buff);
+		}
+		else{
+			*line = ft_strnew(ft_strlen(buff));
+			*line = ft_strsub(buff, 1, ft_strlen(buff) - 1);
+		}
 	}
 	else {
 		*line = ft_strnew(0);
