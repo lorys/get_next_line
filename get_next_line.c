@@ -6,7 +6,7 @@
 /*   By: llopez <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/27 14:51:28 by llopez            #+#    #+#             */
-/*   Updated: 2017/11/28 14:46:13 by llopez           ###   ########.fr       */
+/*   Updated: 2017/11/29 13:33:46 by llopez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,10 @@ static int		find_break(char *str)
 
 	i = 0;
 	while (str[i])
+	{
 		if (str[i++] == '\n')
 			return (i - 1);
+	}
 	return (-1);
 }
 
@@ -29,22 +31,22 @@ int		get_next_line(const int fd, char **line)
 	char		line_read[BUFF_SIZE + 1];
 	static char *buff;
 	char		*tmp;
-	char		*tmp_buff;
+	int			break_found;
 
-	printf("fuck\n");
 	if (buff != NULL)
 	{
 		if (find_break(buff) > -1)
 		{
-			*line = ft_strnew((size_t)find_break(buff));
-			*line = ft_strsub(buff, 0, (size_t)find_break(buff) - 1);
-			ft_strncpy(*line, buff, (find_break(buff) - 1));
-			tmp_buff = ft_strsub(*line, (find_break(buff) + 1), \
-				(ft_strlen(buff) - find_break(buff)));
+			break_found = find_break(buff);
+			*line = ft_strnew((size_t)break_found);
+			ft_strncpy(*line, buff, (size_t)break_found);
+			tmp = ft_strnew(ft_strlen(buff) - break_found);
+			tmp = ft_strsub(buff, (break_found + 1), (ft_strlen(buff) - (break_found + 1)));
 			free(buff);
-			buff = ft_strnew(ft_strlen(tmp_buff));
-			ft_strcpy(buff, tmp_buff);
-			free(tmp_buff);
+			buff = ft_strnew(ft_strlen(tmp));
+			ft_strcpy(buff, tmp);
+			free(tmp);
+			return (1);
 		}
 		else{
 			*line = ft_strnew(ft_strlen(buff));
@@ -52,10 +54,9 @@ int		get_next_line(const int fd, char **line)
 		}
 	}
 	else {
-		*line = ft_strnew(0);
-	}
-	if (buff == NULL)
 		buff = ft_strnew(0);
+	}
+	*line = ft_strnew(0);
 	line_read[BUFF_SIZE] = '\0';
 	while ((i_buff = read(fd, line_read, BUFF_SIZE)) > 0)
 	{
@@ -67,7 +68,7 @@ int		get_next_line(const int fd, char **line)
 			*line = ft_strnew(ft_strlen(*line) + ft_strlen(buff));
 			ft_strcpy(*line, tmp);
 			*line = ft_strncat(*line, line_read, (size_t)find_break(line_read));
-			buff = ft_strsub(line_read, find_break(line_read), (BUFF_SIZE \
+			buff = ft_strsub(line_read, find_break(line_read)+1, (BUFF_SIZE \
 					- find_break(line_read)));
 			break;
 		}
