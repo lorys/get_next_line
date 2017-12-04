@@ -6,7 +6,7 @@
 #    By: llopez <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/11/12 18:15:23 by llopez            #+#    #+#              #
-#    Updated: 2017/11/18 17:26:23 by llopez           ###   ########.fr        #
+#    Updated: 2017/12/04 16:16:07 by llopez           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -38,6 +38,7 @@ SOURCES = ft_atoi.c \
 		  ft_strncat.c \
 		  ft_strlcat.c \
 		  ft_strdup.c \
+		  ft_strndup.c \
 		  ft_memchr.c \
 		  ft_memcmp.c \
 		  ft_strcpy.c \
