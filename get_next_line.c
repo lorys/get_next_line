@@ -6,7 +6,7 @@
 /*   By: llopez <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/27 14:51:28 by llopez            #+#    #+#             */
-/*   Updated: 2017/12/04 17:07:50 by llopez           ###   ########.fr       */
+/*   Updated: 2017/12/05 11:44:10 by llopez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,12 @@ static int		find_break(char *str)
 	return (-1);
 }
 
-static int		ft_fill_buff(int fd, char **line, char	*buff)
+static int		ft_fill_buff(int fd, char *line, char **buff)
 {
 	int			break_found;
 	int			i_buff;
 	char		line_read[BUFF_SIZE + 1];
-
+printf("line = %s\n", *line);
 	while ((i_buff = read(fd, line_read, BUFF_SIZE)) > 0)
 	{
 		line_read[i_buff] = '\0';
@@ -43,6 +43,7 @@ static int		ft_fill_buff(int fd, char **line, char	*buff)
 		else
 			*line = ft_strjoin(*line, line_read);
 	}
+	printf("line : %s\nbuff : %s\nline_read : %s\n", *line, buff, line_read);
 	if (ft_strlen(*line) > 0 || i_buff > 0)
 		return (1);
 	return (0);
@@ -50,8 +51,7 @@ static int		ft_fill_buff(int fd, char **line, char	*buff)
 
 int				get_next_line(const int fd, char **line)
 {
-	static char *buff;
-	int			break_found;
+	static char	*buff;
 
 	if (fd < 0 || read(fd, NULL, 0) == -1 || line == NULL)
 		return (-1);
@@ -59,20 +59,27 @@ int				get_next_line(const int fd, char **line)
 	{
 		if (find_break(buff) > -1)
 		{
-			break_found = find_break(buff);
-			*line = ft_strndup(buff, break_found);
-			ft_strcpy(buff, (buff + break_found + 1));
+			*line = ft_strndup(buff, find_break(buff));
+			ft_strcpy(buff, (buff + find_break(buff) + 1));
 			return (1);
 		}
-		else {
+		else
+		{
 			*line = ft_strdup(buff);
 			free(buff);
 			buff = ft_strnew(0);
 		}
 	}
-	else {
+	else
+	{
 		buff = ft_strnew(0);
 		*line = ft_strnew(0);
 	}
-	return (ft_fill_buff(fd, line, buff));
+	if (ft_fill_buff(fd, **line, &buff) == 1)
+	{
+		printf("ligne lu : %s\nbuff static : %s\n", *line, buff);
+		return (1);
+	}
+	else
+		return (0);
 }
