@@ -6,7 +6,7 @@
 /*   By: llopez <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/27 14:51:28 by llopez            #+#    #+#             */
-/*   Updated: 2017/12/05 11:44:10 by llopez           ###   ########.fr       */
+/*   Updated: 2017/12/07 11:07:29 by llopez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,12 @@ static int		find_break(char *str)
 	return (-1);
 }
 
-static int		ft_fill_buff(int fd, char *line, char **buff)
+static int		ft_fill_buff(int fd, char **line, char **buff)
 {
 	int			break_found;
 	int			i_buff;
 	char		line_read[BUFF_SIZE + 1];
-printf("line = %s\n", *line);
+
 	while ((i_buff = read(fd, line_read, BUFF_SIZE)) > 0)
 	{
 		line_read[i_buff] = '\0';
@@ -37,13 +37,12 @@ printf("line = %s\n", *line);
 			break_found = find_break(line_read);
 			line_read[break_found] = '\0';
 			*line = ft_strjoin(*line, line_read);
-			buff = ft_strjoin(buff, (line_read + break_found + 1));
+			*buff = ft_strjoin(*buff, (line_read + break_found + 1));
 			return (1);
 		}
 		else
 			*line = ft_strjoin(*line, line_read);
 	}
-	printf("line : %s\nbuff : %s\nline_read : %s\n", *line, buff, line_read);
 	if (ft_strlen(*line) > 0 || i_buff > 0)
 		return (1);
 	return (0);
@@ -75,11 +74,7 @@ int				get_next_line(const int fd, char **line)
 		buff = ft_strnew(0);
 		*line = ft_strnew(0);
 	}
-	if (ft_fill_buff(fd, **line, &buff) == 1)
-	{
-		printf("ligne lu : %s\nbuff static : %s\n", *line, buff);
+	if (ft_fill_buff(fd, line, &buff) == 1)
 		return (1);
-	}
-	else
-		return (0);
+	return (0);
 }
