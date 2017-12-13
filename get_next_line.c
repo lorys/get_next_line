@@ -6,7 +6,7 @@
 /*   By: llopez <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/27 14:51:28 by llopez            #+#    #+#             */
-/*   Updated: 2017/12/07 11:07:29 by llopez           ###   ########.fr       */
+/*   Updated: 2017/12/13 15:38:52 by llopez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,31 +50,29 @@ static int		ft_fill_buff(int fd, char **line, char **buff)
 
 int				get_next_line(const int fd, char **line)
 {
-	static char	*buff;
+	static char	*buff[OPEN_MAX];
 
 	if (fd < 0 || read(fd, NULL, 0) == -1 || line == NULL)
 		return (-1);
-	if (buff != NULL)
+	if (buff[fd] != NULL)
 	{
-		if (find_break(buff) > -1)
+		if (find_break(buff[fd]) > -1)
 		{
-			*line = ft_strndup(buff, find_break(buff));
-			ft_strcpy(buff, (buff + find_break(buff) + 1));
+			*line = ft_strndup(buff[fd], find_break(buff[fd]));
+			ft_strcpy(buff[fd], (buff[fd] + find_break(buff[fd]) + 1));
 			return (1);
 		}
 		else
 		{
-			*line = ft_strdup(buff);
-			free(buff);
-			buff = ft_strnew(0);
+			*line = ft_strdup(buff[fd]);
+			free(buff[fd]);
+			buff[fd] = ft_strnew(0);
 		}
 	}
 	else
 	{
-		buff = ft_strnew(0);
+		buff[fd] = ft_strnew(0);
 		*line = ft_strnew(0);
 	}
-	if (ft_fill_buff(fd, line, &buff) == 1)
-		return (1);
-	return (0);
+	return (ft_fill_buff(fd, line, &buff[fd]));
 }
