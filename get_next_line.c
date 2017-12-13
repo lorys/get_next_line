@@ -6,7 +6,7 @@
 /*   By: llopez <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/27 14:51:28 by llopez            #+#    #+#             */
-/*   Updated: 2017/12/13 15:38:52 by llopez           ###   ########.fr       */
+/*   Updated: 2017/12/13 17:44:02 by llopez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,21 @@ static int		find_break(char *str)
 	return (-1);
 }
 
+static char		*ft_strfjoin(char *s1, char const *s2)
+{
+	char *alloc;
+
+	if (!s1 || !s2)
+		return (NULL);
+	alloc = (char *)malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
+	if (!alloc)
+		return (NULL);
+	ft_strcpy(alloc, s1);
+	ft_strcpy(alloc + ft_strlen(s1), s2);
+	free(s1);
+	return (alloc);
+}
+
 static int		ft_fill_buff(int fd, char **line, char **buff)
 {
 	int			break_found;
@@ -36,12 +51,12 @@ static int		ft_fill_buff(int fd, char **line, char **buff)
 		{
 			break_found = find_break(line_read);
 			line_read[break_found] = '\0';
-			*line = ft_strjoin(*line, line_read);
-			*buff = ft_strjoin(*buff, (line_read + break_found + 1));
+			*line = ft_strfjoin(*line, line_read);
+			*buff = ft_strfjoin(*buff, (line_read + break_found + 1));
 			return (1);
 		}
 		else
-			*line = ft_strjoin(*line, line_read);
+			*line = ft_strfjoin(*line, line_read);
 	}
 	if (ft_strlen(*line) > 0 || i_buff > 0)
 		return (1);

@@ -6,13 +6,13 @@
 /*   By: llopez <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/27 15:18:10 by llopez            #+#    #+#             */
-/*   Updated: 2017/12/13 14:53:23 by llopez           ###   ########.fr       */
+/*   Updated: 2017/12/13 17:47:47 by llopez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef GET_NEXT_LINE_H
 # define GET_NEXT_LINE_H
-# define BUFF_SIZE 500
+# define BUFF_SIZE 5000000
 # include "libft/libft.h"
 # include <stdio.h>
 # include <sys/types.h>
