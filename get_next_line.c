@@ -6,11 +6,12 @@
 /*   By: llopez <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/27 14:51:28 by llopez            #+#    #+#             */
-/*   Updated: 2017/12/14 16:49:31 by llopez           ###   ########.fr       */
+/*   Updated: 2017/12/15 16:57:45 by llopez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+#include <unistd.h>
 
 static int		find_break(char *str)
 {
@@ -26,14 +27,25 @@ static int		find_break(char *str)
 static char		*ft_strfjoin(char *s1, char const *s2)
 {
 	char		*alloc;
+	int			s_len[2];
+	int			i;
+	int			x;
 
+	i = 0;
+	x = 0;
+	s_len[0] = ft_strlen(s1);
+	s_len[1] = ft_strlen(s2);
 	if (!s1 || !s2)
 		return (NULL);
-	alloc = (char *)malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
+	alloc = ft_strnew(s_len[0] + s_len[1]);
 	if (!alloc)
 		return (NULL);
-	ft_strcpy(alloc, s1);
-	ft_strcpy(alloc + ft_strlen(s1), s2);
+	while (s1[i] != '\0')
+		alloc[x++] = s1[i++];
+	i = 0;
+	while (s2[i] != '\0')
+		alloc[x++] = s2[i++];
+	alloc[x] = '\0';
 	free(s1);
 	return (alloc);
 }
@@ -58,7 +70,7 @@ static int		ft_fill_buff(int fd, char **line, char **buff)
 		else
 			*line = ft_strfjoin(*line, line_read);
 	}
-	return (i_buff > 0);
+	return (ft_strlen(*line) > 0);
 }
 
 int				get_next_line(const int fd, char **line)
@@ -69,7 +81,6 @@ int				get_next_line(const int fd, char **line)
 		return (-1);
 	if (buff[fd] != NULL)
 	{
-		printf("1\n");
 		if (find_break(buff[fd]) > -1)
 		{
 			*line = ft_strndup(buff[fd], find_break(buff[fd]));

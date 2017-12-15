@@ -6,7 +6,7 @@
 /*   By: llopez <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/27 16:54:17 by llopez            #+#    #+#             */
-/*   Updated: 2017/12/14 16:49:30 by llopez           ###   ########.fr       */
+/*   Updated: 2017/12/15 16:57:50 by llopez           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ int		main(int argc, char **argv)
 	char	*line;
 	int		i;
 
+	(void)argc;
 	i = 0;
 	fd = open(argv[1], O_RDONLY);
 	while (get_next_line(fd, &line) > 0)
